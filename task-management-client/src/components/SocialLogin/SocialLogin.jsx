@@ -15,7 +15,7 @@ const SocialLogin = () => {
     }
     return (
         <div>
-            <div onClick={handleGoogleBtn} className="flex "><FcGoogle/> <span>Google</span></div>
+            <div onClick={handleGoogleBtn} className="flex text-center  px-5 py-2 bg-white  rounded-sm items-center justify-center gap-1  mt-2"><FcGoogle/> <span>Google</span></div>
         </div>
     );
 };

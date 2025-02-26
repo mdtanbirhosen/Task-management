@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import logo from "../../assets/logo.png"
+import { CiUser } from "react-icons/ci";
 const Navbar = () => {
 
-    const {user, logOut} = useContext(AuthContext);
+    const {  logOut } = useContext(AuthContext);
     const handleLogOut = () => {
         logOut().then(() => {
             console.log('logged out');
@@ -16,14 +17,11 @@ const Navbar = () => {
                     <a className="btn btn-ghost text-xl"><img src={logo} className="h-10 w-full" alt="" /></a>
                 </div>
                 <div className="flex-none">
-                    
+
                     <div className="dropdown dropdown-end">
-                        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                            <div className="w-10 rounded-full">
-                                <img
-                                    alt=""
-                                    src={user?.photoURL} />
-                            </div>
+                        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar bg-white">
+                            
+<CiUser className="text-3xl" />
                         </div>
                         <ul
                             tabIndex={0}

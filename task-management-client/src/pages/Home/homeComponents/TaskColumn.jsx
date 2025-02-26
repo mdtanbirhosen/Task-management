@@ -7,7 +7,7 @@ const TaskColumn = ({ category, tasks }) => {
     const { setNodeRef } = useDroppable({ id: category });
     
     return (
-        <div ref={setNodeRef} className="p-4 border rounded shadow bg-gray-100 min-h-[300px] flex flex-col">
+        <div ref={setNodeRef} className="p-4 border rounded shadow bg-[] min-h-[300px] flex flex-col">
             <h2 className="text-lg font-bold mb-2 text-center">{category}</h2>
             <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
                 {tasks.map((task) => (

@@ -2,12 +2,13 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { useState, useEffect } from 'react';
 import TaskColumn from './TaskColumn';
 import useAllTask from '../../../hooks/useAllTask';
+import AddTask from './AddTask';
 
 const categories = ['To-Do', 'In Progress', 'Done'];
 
 const TaskBoard = () => {
     const [tasks, setTasks] = useState([]);
-    const allTasks = useAllTask()
+    const {tasks:allTasks} = useAllTask()
     useEffect(() => {
         setTasks(allTasks);
     }, [allTasks]);
@@ -49,10 +50,16 @@ const TaskBoard = () => {
         }
     };
 
+
+
     return (
-        <div className='pt-20'>
+        <div className='p-4'>
+           <div className='flex justify-end mb-5'>
+            
+         <AddTask></AddTask>
+           </div>
             <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-                <div className="grid grid-cols-3 gap-4 p-4">
+                <div className="grid grid-cols-3 gap-4 ">
                     {categories.map((category) => (
                         <TaskColumn
                             key={category} 

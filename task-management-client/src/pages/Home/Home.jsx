@@ -4,7 +4,10 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import { useEffect } from 'react';
+import useAuth from '../../hooks/useAuth';
+import { Navigate } from 'react-router-dom';
 
 const categories = ['To-Do', 'In Progress', 'Done'];
 
@@ -47,20 +50,22 @@ const Column = ({ category, tasks }) => {
     );
 };
 
+
 const Home = () => {
+    const {logOut, user, authLoading} = useAuth()
     const [tasks, setTasks] = useState([
         { id: '1', title: 'Task 1', category: 'To-Do' },
         { id: '2', title: 'Task 2', category: 'In Progress' },
         { id: '3', title: 'Task 3', category: 'Done' },
     ]);
 
-    const updateTaskInDB = async (taskId, newCategory) => {
-        try {
-            await axios.patch(`https://your-api-url.com/tasks/${taskId}`, { category: newCategory });
-        } catch (error) {
-            console.error("Failed to update task:", error);
+    const [movedTask, setMovedTask] = useState(null); // Observer variable
+
+    useEffect(() => {
+        if (movedTask) {
+            console.log(`Task "${movedTask.title}" moved to "${movedTask.category}"`);
         }
-    };
+    }, [movedTask]); // Logs whenever movedTask updates
 
     const onDragEnd = async (event) => {
         const { active, over } = event;
@@ -71,16 +76,34 @@ const Home = () => {
 
         const newCategory = over.id;
         if (activeTask.category !== newCategory) {
-            setTasks((prevTasks) =>
-                prevTasks.map((task) =>
-                    task.id === active.id ? { ...task, category: newCategory } : task
-                )
+            const updatedTasks = tasks.map((task) =>
+                task.id === active.id ? { ...task, category: newCategory } : task
             );
-            await updateTaskInDB(active.id, newCategory); // Update DB after state update
+            setTasks(updatedTasks);
+
+            const moved = { ...activeTask, category: newCategory };
+            setMovedTask(moved);
+
+            // await updateTaskInDB(active.id, newCategory);
         }
     };
 
+    //  handle log out 
+    const handleLogOut = ()=>{
+        logOut()
+        .then(()=>{
+            console.log('logged out')
+        })
+    }
+
+
+    // condition to login user
+    if(authLoading) return <div>Loading...</div>
+    if(!user) return <Navigate to={'/login'}></Navigate>
+
     return (
+        <div>
+            
         <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
             <div className="grid grid-cols-3 gap-4 p-4">
                 {categories.map((category) => (
@@ -88,11 +111,13 @@ const Home = () => {
                         key={category} 
                         category={category} 
                         tasks={tasks.filter((task) => task.category === category)} 
-                        setTasks={setTasks} 
                     />
                 ))}
+                
             </div>
         </DndContext>
+        <button onClick={()=> handleLogOut()}>hello</button>
+        </div>
     );
 };
 

@@ -1,69 +1,47 @@
 import PropTypes from "prop-types";
 import { createContext, useEffect, useState } from "react";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 
+export const AuthContext = createContext(null);
 
-export const AuthContext = createContext(null)
-const AuthProvider = ({children}) => {
-    const [user, setUser]= useState(null)
-    const [authLoading, setAuthLoading] = useState(false)
+const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [authLoading, setAuthLoading] = useState(true);
 
     const googleProvider = new GoogleAuthProvider();
 
-    const googleSignIn = ()=>{
+    const googleSignIn = () => {
         setAuthLoading(true);
         return signInWithPopup(auth, googleProvider);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-useEffect(()=>{
-    const unsubscribe = onAuthStateChanged(auth, (currentUser)=>{
-        console.log(currentUser);
-        if(currentUser.email){
-            setUser(currentUser)
-        }else{
-            setUser(currentUser)
-        }
-        setAuthLoading(false);
-        
-    })
-    return ()=>{
-        unsubscribe();
     };
-},[])
 
+    const logOut = () => {
+        setAuthLoading(true);
+        return signOut(auth);
+    };
 
+    useEffect(() => {
+        setAuthLoading(true); 
 
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            console.log(currentUser);
+            setUser(currentUser);
+            setAuthLoading(false);
+        });
 
+        return () => unsubscribe();
+    }, []);
 
-
-    // shared data
+    // Shared data
     const authInfo = {
         user,
         setUser,
         googleSignIn,
         authLoading,
-        
+        logOut,
+    };
 
-    }
     return (
         <AuthContext.Provider value={authInfo}>
             {children}
@@ -73,5 +51,6 @@ useEffect(()=>{
 
 AuthProvider.propTypes = {
     children: PropTypes.node.isRequired,
-}
+};
+
 export default AuthProvider;

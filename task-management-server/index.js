@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors');
+require('dotenv').config();
 const app = express()
 const port = process.env.PORT || 5000
 // Middleware to parse JSON request bodies
@@ -28,11 +29,12 @@ async function run() {
         // database 
         const database = client.db('TaskManager')
         const taskCollection = database.collection('tasks');
-
-        // end points here
-
+        // --------------------------------------------------------------------end points start here------------------------------------------------------------------------------
         
         
+        
+        
+        // --------------------------------------------------------------------end points End here------------------------------------------------------------------------------
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");

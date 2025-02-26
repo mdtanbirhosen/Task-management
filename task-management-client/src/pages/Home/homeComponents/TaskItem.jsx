@@ -1,8 +1,7 @@
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import PropTypes from 'prop-types';
-
-const TaskItem = ({ task }) => {
+const TaskItem = ({ task,  }) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useDraggable({ id: task._id });
 
     const style = {
@@ -21,9 +20,10 @@ const TaskItem = ({ task }) => {
             style={style} 
             {...attributes} 
             {...listeners} 
-            className="p-4 border rounded shadow m-2 cursor-pointer flex items-center justify-center max-h-20"
+            className="  flex items-center justify-between max-h-20"
+            
         >
-            {task.title}
+            <h2>{task.title}</h2> 
         </div>
     );
 };

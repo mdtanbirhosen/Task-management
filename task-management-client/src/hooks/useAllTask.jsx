@@ -9,7 +9,7 @@ const useAllTask = () => {
         queryKey: ["tasks", user?.email], // Unique query key
         queryFn: async () => {
             if (!user?.email) return [];
-            const res = await axios.get(`http://localhost:5000/tasks?email=${user.email}`);
+            const res = await axios.get(`https://task-management-server-six-mu.vercel.app/tasks?email=${user.email}`);
             return res.data;
         },
         enabled: !!user?.email, // Prevents running if user is not available

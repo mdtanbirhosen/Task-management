@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react';
 import TaskColumn from './TaskColumn';
 import useAllTask from '../../../hooks/useAllTask';
 import AddTask from './AddTask';
+import axios from 'axios';
 
 const categories = ['To-Do', 'In Progress', 'Done'];
 
 const TaskBoard = () => {
     const [tasks, setTasks] = useState([]);
-    const {tasks:allTasks} = useAllTask()
+    const {tasks:allTasks, refetch} = useAllTask()
     useEffect(() => {
         setTasks(allTasks);
     }, [allTasks]);
@@ -18,7 +19,7 @@ const TaskBoard = () => {
     useEffect(() => {
         if (movedTask) {
             console.log(`Task "${movedTask.title}" moved to "${movedTask.category}"`);
-            fetch('http://localhost:5000/tasks',{
+            fetch('https://task-management-server-six-mu.vercel.app/tasks',{
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,7 +51,13 @@ const TaskBoard = () => {
         }
     };
 
-
+    const handleDelete = (id)=>{
+        axios.delete(`https://task-management-server-six-mu.vercel.app/tasks/${id}`)
+        .then(response => {
+            console.log(response.data)
+            refetch()
+        })
+    }
 
     return (
         <div className='p-4'>
@@ -65,6 +72,7 @@ const TaskBoard = () => {
                             key={category} 
                             category={category} 
                             tasks={tasks.filter((task) => task.category === category)} 
+                            handleDelete={handleDelete}
                         />
                     ))}
                 </div>

@@ -34,7 +34,7 @@ const NoTasks = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:5000/tasks", newTask);
+            const response = await axios.post("https://task-management-server-six-mu.vercel.app/tasks", newTask);
             console.log(response.data);
             refetch(); // Refresh task list
         } catch (error) {

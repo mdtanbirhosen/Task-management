@@ -31,7 +31,13 @@ async function run() {
         const taskCollection = database.collection('tasks');
         // --------------------------------------------------------------------end points start here------------------------------------------------------------------------------
         
-        
+        // get all task for specific user
+        app.get('/tasks', async(req,res)=>{
+            const email = req.query.email;
+            const query = {email: email};
+            const tasks = await taskCollection.find(query).toArray();
+            res.send(tasks);
+        })
         
         
         // --------------------------------------------------------------------end points End here------------------------------------------------------------------------------

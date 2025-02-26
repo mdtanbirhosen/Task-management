@@ -1,13 +1,10 @@
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import useAuth from '../../../hooks/useAuth';
 import TaskColumn from './TaskColumn';
 
 const categories = ['To-Do', 'In Progress', 'Done'];
 
 const TaskBoard = () => {
-    const { logOut, user, authLoading } = useAuth();
     const [tasks, setTasks] = useState([
         { id: '1', title: 'Task 1', category: 'To-Do' },
         { id: '2', title: 'Task 2', category: 'In Progress' },
@@ -40,23 +37,12 @@ const TaskBoard = () => {
         }
     };
 
-    const handleLogOut = () => {
-        logOut().then(() => {
-            console.log('logged out');
-        });
-    };
 
-    if (authLoading) {
-        console.log('loading...');
-        return <div>Loading...</div>;
-    }
-    if (!user) {
-        console.log('not logged in');
-        return <Navigate to={'/login'} />;
-    }
+
+
 
     return (
-        <div>
+        <div className='pt-20'>
             <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
                 <div className="grid grid-cols-3 gap-4 p-4">
                     {categories.map((category) => (
@@ -68,7 +54,6 @@ const TaskBoard = () => {
                     ))}
                 </div>
             </DndContext>
-            <button onClick={handleLogOut}>Logout</button>
         </div>
     );
 };

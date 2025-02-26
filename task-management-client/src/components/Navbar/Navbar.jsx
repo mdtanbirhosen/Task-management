@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
-
+import logo from "../../assets/logo.png"
 const Navbar = () => {
 
     const {user, logOut} = useContext(AuthContext);
@@ -13,7 +13,7 @@ const Navbar = () => {
         <div className="bg-[#EBE5C2] fixed w-full ">
             <div className="navbar shadow-sm">
                 <div className="flex-1">
-                    <a className="btn btn-ghost text-xl">daisyUI</a>
+                    <a className="btn btn-ghost text-xl"><img src={logo} className="h-10 w-full" alt="" /></a>
                 </div>
                 <div className="flex-none">
                     
@@ -32,7 +32,6 @@ const Navbar = () => {
                             <li>
                                 <a className="justify-between">
                                     Profile
-                                    <span className="badge">New</span>
                                 </a>
                             </li>
                             <li onClick={handleLogOut} ><a>LogOut</a></li>

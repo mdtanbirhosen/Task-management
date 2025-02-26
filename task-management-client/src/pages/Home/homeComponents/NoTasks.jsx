@@ -1,61 +1,99 @@
-import { FaPlus } from "react-icons/fa"
-import useAuth from "../../../hooks/useAuth";
+import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
 import useAllTask from "../../../hooks/useAllTask";
+import axios from "axios";
+
 const NoTasks = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const {user} = useAuth();
-    const {refetch} = useAllTask();
+    const [category, setCategory] = useState("To-Do");
+    const { user } = useAuth();
+    const { refetch } = useAllTask();
 
-    const handleAddTask = () => {
+    const handleAddTask = async () => {
+        if (!title.trim()) {
+            alert("Title is required!");
+            return;
+        }
+        if (title.length > 50) {
+            alert("Title cannot exceed 50 characters!");
+            return;
+        }
+        if (description.length > 200) {
+            alert("Description cannot exceed 200 characters!");
+            return;
+        }
+
         const newTask = {
             title,
             description,
-            category: "To-Do",
+            category,
             email: user.email,
-        }
-        fetch('http://localhost:5000/tasks',{
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newTask),
-        })
-        .then((response)=>{
-            console.log(response.data);
-            refetch();
+            timestamp: new Date().toISOString(), // Auto-generated timestamp
+        };
 
-        })
+        try {
+            const response = await axios.post("http://localhost:5000/tasks", newTask);
+            console.log(response.data);
+            refetch(); // Refresh task list
+        } catch (error) {
+            console.error("Error adding task:", error);
+        }
+
+        // Reset input fields
         setTitle(""); 
-        setDescription(""); 
-        document.getElementById('my_modal_1').close(); 
+        setDescription("");
+        setCategory("To-Do");
+        document.getElementById("my_modal_1").close();
     };
+
     return (
         <div>
-            <div className="p-7  flex justify-center items-center bg-amber-100 rounded-full">
-                <div  onClick={() => document.getElementById('my_modal_1').showModal()}  className="px-4 hover:bg-blue-200 cursor-pointer py-4 rounded-full  bg-white "><FaPlus className="text-3xl"></FaPlus></div>
+            {/* Floating Add Button */}
+            <div className="p-7 flex justify-center items-center bg-amber-100 rounded-full">
+                <div 
+                    onClick={() => document.getElementById("my_modal_1").showModal()}  
+                    className="px-4 hover:bg-blue-200 cursor-pointer py-4 rounded-full bg-white"
+                >
+                    <FaPlus className="text-3xl" />
+                </div>
             </div>
 
+            {/* Add Task Modal */}
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Add New Task</h3>
                     
                     {/* Input Fields */}
                     <div className="py-4">
+                        {/* Title Input */}
                         <input 
                             type="text" 
-                            placeholder="Title" 
+                            placeholder="Title (max 50 characters)" 
                             className="input input-bordered w-full mb-2"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
+
+                        {/* Description Input */}
                         <textarea 
-                            placeholder="Description" 
-                            className="textarea textarea-bordered w-full"
+                            placeholder="Description (optional, max 200 characters)" 
+                            className="textarea textarea-bordered w-full mb-2"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
+
+                        {/* Category Dropdown */}
+                        <select 
+                            className="select select-bordered w-full mb-2"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
+                            <option value="To-Do">To-Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
                     </div>
 
                     {/* Modal Actions */}

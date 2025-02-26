@@ -11,7 +11,7 @@ const TaskColumn = ({ category, tasks }) => {
             <h2 className="text-lg font-bold mb-2 text-center">{category}</h2>
             <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
                 {tasks.map((task) => (
-                    <TaskItem key={task.id} task={task} />
+                    <TaskItem key={task._id} task={task} />
                 ))}
             </SortableContext>
         </div>

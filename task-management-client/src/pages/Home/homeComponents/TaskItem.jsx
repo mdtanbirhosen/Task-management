@@ -3,7 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import PropTypes from 'prop-types';
 
 const TaskItem = ({ task }) => {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useDraggable({ id: task.id });
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useDraggable({ id: task._id });
 
     const style = {
         transform: CSS.Transform.toString(transform),

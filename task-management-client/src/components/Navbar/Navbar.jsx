@@ -9,7 +9,6 @@ const Navbar = () => {
             console.log('logged out');
         });
     };
-    console.log(user?.photoURL)
     return (
         <div className="bg-[#EBE5C2] fixed w-full ">
             <div className="navbar shadow-sm">

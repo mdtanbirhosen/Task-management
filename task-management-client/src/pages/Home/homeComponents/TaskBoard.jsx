@@ -1,21 +1,33 @@
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { useState, useEffect } from 'react';
 import TaskColumn from './TaskColumn';
+import useAllTask from '../../../hooks/useAllTask';
 
 const categories = ['To-Do', 'In Progress', 'Done'];
 
 const TaskBoard = () => {
-    const [tasks, setTasks] = useState([
-        { id: '1', title: 'Task 1', category: 'To-Do' },
-        { id: '2', title: 'Task 2', category: 'In Progress' },
-        { id: '3', title: 'Task 3', category: 'Done' },
-    ]);
+    const [tasks, setTasks] = useState([]);
+    const allTasks = useAllTask()
+    useEffect(() => {
+        setTasks(allTasks);
+    }, [allTasks]);
 
     const [movedTask, setMovedTask] = useState(null);
 
     useEffect(() => {
         if (movedTask) {
             console.log(`Task "${movedTask.title}" moved to "${movedTask.category}"`);
+            fetch('http://localhost:5000/tasks',{
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    _id: movedTask._id,
+                    category: movedTask.category,
+                }),
+            })
+            .then(response => console.log(response));
         }
     }, [movedTask]);
 
@@ -23,23 +35,19 @@ const TaskBoard = () => {
         const { active, over } = event;
         if (!over) return;
 
-        const activeTask = tasks.find((task) => task.id === active.id);
+        const activeTask = tasks.find((task) => task._id === active.id);
         if (!activeTask) return;
 
         const newCategory = over.id;
         if (activeTask.category !== newCategory) {
             const updatedTasks = tasks.map((task) =>
-                task.id === active.id ? { ...task, category: newCategory } : task
+                task._id === active.id ? { ...task, category: newCategory } : task
             );
             setTasks(updatedTasks);
 
             setMovedTask({ ...activeTask, category: newCategory });
         }
     };
-
-
-
-
 
     return (
         <div className='pt-20'>

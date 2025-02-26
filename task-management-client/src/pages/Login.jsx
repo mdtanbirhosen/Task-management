@@ -10,7 +10,7 @@ const Login = () => {
 
             <div className="card bg-[#EBE5C2] w-full max-w-sm shrink-0 ">
                 <div className="card-body">
-                <h1 className="mx-auto py-3 text-2xl">Login To Get All The Facilities</h1>
+                <h1 className="mx-auto py-3 text-2xl text-center">Login To Get All The Facilities</h1>
                     <fieldset className="fieldset">
                         <label className="fieldset-label">Email</label>
                         <input name="name" type="email" className="input" placeholder="Email" />

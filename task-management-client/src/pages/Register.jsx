@@ -8,7 +8,7 @@ const Register = () => {
 
             <div className="card bg-[#EBE5C2] w-full max-w-sm shrink-0 ">
                 <div className="card-body">
-                    <h1 className="mx-auto py-3 text-2xl">Register Now</h1>
+                    <h1 className="mx-auto py-3 text-2xl text-center">Register Now to get all the facilities</h1>
                     <form className="fieldset">
                         <label className="fieldset-label">Name</label>
                         <input name="name" type="text" className="input" placeholder="Name" />

@@ -4,6 +4,7 @@ import TaskBoard from "./homeComponents/TaskBoard";
 import useAllTask from "../../hooks/useAllTask";
 import Navbar from "../../components/Navbar/Navbar";
 import NoTasks from "./homeComponents/NoTasks";
+import Loading from "../../components/Loading/Loading";
 
 const Home = () => {
     const {  user, authLoading } = useAuth();
@@ -11,7 +12,7 @@ const Home = () => {
     console.log(tasks)
         if (authLoading) {
             console.log('loading...')
-            return <div>Loading...</div>
+            return <Loading></Loading>
         }
         if (!user) {
             console.log('not logged in');
